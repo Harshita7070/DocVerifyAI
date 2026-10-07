@@ -119,6 +119,8 @@ Screening information is stored locally using SQLite for the prototype.
 
 ---
 
+
+
 # 🔄 System Workflow
 
 ```text
@@ -243,32 +245,6 @@ python app.py
 Open your browser and visit:
 
 http://127.0.0.1:5000
-👨‍💼 Admin Dashboard
-
-The system includes an admin dashboard for monitoring screening history and results.
-
-Admin functionality includes:
-
-Authentication
-Screening history
-Risk statistics
-Verification status
-Report access
-
-For security, production deployments should use environment variables and secure password management rather than hardcoded credentials.
-
-📊 Risk Assessment
-
-The risk engine combines multiple verification indicators.
-
-Possible outcomes:
-
-Risk Level	Meaning
-🟢 LOW	No major suspicious indicators detected
-🟡 MEDIUM	Some suspicious indicators detected
-🔴 HIGH	Multiple suspicious indicators detected
-
-The risk score is intended to support preliminary screening and does not represent a final legal or identity-verification decision.
 
 🔐 Security Considerations
 
@@ -282,28 +258,24 @@ Production systems should use secure authentication.
 API credentials should be stored using environment variables.
 Real government databases should only be accessed through authorized APIs.
 Personal identity documents should not be stored unnecessarily.
+
 ⚠️ Limitations
 
 This project is currently a prototype.
 
 Registry
-
 The registry verification module uses simulated data and does not connect to real government databases.
 
 Face Verification
-
 The current face verification module is a prototype and should not be treated as production-grade biometric authentication.
 
 Tampering Detection
-
 Tampering detection provides indicators of possible manipulation but cannot guarantee that a document is forged.
 
 MRZ Detection
-
 The current MRZ module uses pattern-based detection and is not a complete ICAO-compliant MRZ verification system.
 
 Risk Score
-
 The risk score is intended for preliminary screening and should not be used as the sole basis for a legal or identity decision.
 
 🚀 Future Scope
