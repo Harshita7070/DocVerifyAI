@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | DOCVERIFY AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #05080d;
+            --panel: #0a1018;
+            --line: #172735;
+            --cyan: #00e5ff;
+            --green: #39ff88;
+            --red: #ff4d67;
+            --text: #dce8ef;
+            --muted: #718493;
+            --mono: "Consolas", "Courier New", monospace;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(0,229,255,.08),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(57,255,136,.05),
+                    transparent 30%
+                ),
+                #05080d;
+
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(0,229,255,.045) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0,229,255,.045) 1px,
+                    transparent 1px
+                );
+
+            background-size: 38px 38px;
+
+            opacity: .18;
+
+            pointer-events: none;
+        }
+
+        .login-container {
+            width: 420px;
+            max-width: 90%;
+
+            position: relative;
+            z-index: 2;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(13,21,31,.97),
+                    rgba(7,12,18,.97)
+                );
+
+            border: 1px solid var(--line);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.5),
+                0 0 40px rgba(0,229,255,.04);
+
+            padding: 35px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-mark {
+            width: 55px;
+            height: 55px;
+
+            margin: 0 auto 20px;
+
+            border: 1px solid var(--cyan);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--cyan);
+
+            font-size: 22px;
+
+            transform: rotate(45deg);
+
+            box-shadow:
+                0 0 22px rgba(0,229,255,.18);
+        }
+
+        .brand-mark span {
+            transform: rotate(-45deg);
+        }
+
+        .brand h1 {
+            font-family: var(--mono);
+            font-size: 21px;
+            letter-spacing: 2px;
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 7px;
+        }
+
+        .login-title {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+
+            color: var(--muted);
+
+            font-family: var(--mono);
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 12px;
+
+            background: #04090d;
+
+            border: 1px solid #1a2c38;
+
+            color: var(--text);
+
+            font-family: var(--mono);
+            font-size: 12px;
+
+            outline: none;
+
+            transition: .2s;
+        }
+
+        input:focus {
+            border-color: var(--cyan);
+
+            box-shadow:
+                0 0 15px rgba(0,229,255,.08);
+        }
+
+        .login-btn {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-top: 8px;
+
+            background: var(--cyan);
+
+            color: #041016;
+
+            border: 1px solid var(--cyan);
+
+            font-family: var(--mono);
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .login-btn:hover {
+            background: transparent;
+            color: var(--cyan);
+
+            box-shadow:
+                0 0 25px rgba(0,229,255,.15);
+        }
+
+        .error {
+            margin-bottom: 17px;
+
+            padding: 10px;
+
+            border-left: 2px solid var(--red);
+
+            background: rgba(255,77,103,.05);
+
+            color: var(--red);
+
+            font-family: var(--mono);
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+        .security {
+            margin-top: 22px;
+
+            padding-top: 16px;
+
+            border-top: 1px solid #14232e;
+
+            text-align: center;
+
+            color: #4f606b;
+
+            font-family: var(--mono);
+
+            font-size: 9px;
+
+            line-height: 1.6;
+        }
+
+        .status {
+            color: var(--green);
+        }
+
+        @media(max-width:500px) {
+
+            .login-container {
+                padding: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <span>◈</span>
+            </div>
+
+            <h1>
+                DOCVERIFY AI
+            </h1>
+
+            <p>
+                IDENTITY FORENSICS PLATFORM
+            </p>
+
+        </div>
+
+
+        <div class="login-title">
+            ADMINISTRATOR ACCESS //
+        </div>
+
+        <div class="subtitle">
+            Authenticate to access the screening management dashboard.
+        </div>
+
+
+        {% if error %}
+
+        <div class="error">
+            ⚠ {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form method="POST" action="/admin/login">
+
+            <div class="form-group">
+
+                <label>
+                    ADMIN USERNAME
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter username"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    ADMIN PASSWORD
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    required
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+            >
+                AUTHENTICATE ADMIN
+            </button>
+
+        </form>
+
+
+        <div class="security">
+
+            <span class="status">
+                ● AUTHENTICATION MODULE ONLINE
+            </span>
+
+            <br>
+
+            ADMINISTRATIVE ACCESS ONLY
+
+        </div>
+
+    </div>
+
+</body>
+</html>

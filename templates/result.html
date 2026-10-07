@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Result | DOCVERIFY AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #05080d;
+            --panel: #0a1018;
+            --panel-2: #0d151f;
+            --line: #172735;
+            --cyan: #00e5ff;
+            --green: #39ff88;
+            --amber: #ffbd45;
+            --red: #ff4d67;
+            --text: #dce8ef;
+            --muted: #718493;
+            --mono: "Consolas", "Courier New", monospace;
+            --ui: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 10%, rgba(0,229,255,.07), transparent 28%),
+                radial-gradient(circle at 90% 20%, rgba(57,255,136,.045), transparent 25%),
+                linear-gradient(135deg, #030609 0%, #071019 55%, #05080d 100%);
+            color: var(--text);
+            font-family: var(--ui);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .18;
+            background-image:
+                linear-gradient(rgba(0,229,255,.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,229,255,.045) 1px, transparent 1px);
+            background-size: 38px 38px;
+            mask-image: linear-gradient(to bottom, black, transparent 90%);
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 68px;
+            padding: 0 4%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            background: rgba(4, 9, 14, .88);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--mono);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--cyan);
+            display: grid;
+            place-items: center;
+            color: var(--cyan);
+            box-shadow: 0 0 18px rgba(0,229,255,.2);
+            transform: rotate(45deg);
+        }
+
+        .brand-mark span {
+            transform: rotate(-45deg);
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        .system-status {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--green);
+            letter-spacing: 1px;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            margin-right: 7px;
+            box-shadow: 0 0 12px var(--green);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .35;
+                transform: scale(.7);
+            }
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto 70px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            margin-bottom: 9px;
+        }
+
+        .page-header {
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        /* ================= COMMON CARDS ================= */
+
+        .file-card,
+        .card,
+        .risk-card,
+        .notice {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(13,21,31,.96),
+                    rgba(7,12,18,.96)
+                );
+            border: 1px solid var(--line);
+            box-shadow: 0 18px 45px rgba(0,0,0,.25);
+        }
+
+        .file-card {
+            padding: 13px 17px;
+            margin-bottom: 18px;
+            border-left: 2px solid var(--cyan);
+            font-family: var(--mono);
+            font-size: 12px;
+        }
+
+        .file-card .label {
+            color: var(--muted);
+        }
+
+        .file-name {
+            color: var(--cyan);
+            word-break: break-all;
+        }
+
+        /* ================= RISK CARD ================= */
+
+        .risk-card {
+            padding: 25px;
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-card::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border: 1px solid rgba(0,229,255,.08);
+            border-radius: 50%;
+            right: -90px;
+            top: -110px;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .section-kicker {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .risk-header h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .risk-header p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .risk-badge {
+            padding: 7px 13px;
+            border: 1px solid;
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            white-space: nowrap;
+        }
+
+        .risk-low {
+            color: var(--green);
+            border-color: rgba(57,255,136,.45);
+            background: rgba(57,255,136,.06);
+        }
+
+        .risk-medium {
+            color: var(--amber);
+            border-color: rgba(255,189,69,.45);
+            background: rgba(255,189,69,.06);
+        }
+
+        .risk-high {
+            color: var(--red);
+            border-color: rgba(255,77,103,.45);
+            background: rgba(255,77,103,.06);
+        }
+
+        .risk-score-section {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 28px;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .risk-number {
+            font-family: var(--mono);
+            font-size: 58px;
+            line-height: 1;
+            color: var(--cyan);
+            text-shadow: 0 0 22px rgba(0,229,255,.18);
+        }
+
+        .risk-number span {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .risk-description strong {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .risk-description p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .risk-meter {
+            height: 7px;
+            background: #111c26;
+            border: 1px solid #1b2b38;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+
+        .risk-meter-fill {
+            height: 100%;
+            transition: width 1s ease;
+        }
+
+        .meter-low {
+            background: var(--green);
+            box-shadow: 0 0 14px rgba(57,255,136,.45);
+        }
+
+        .meter-medium {
+            background: var(--amber);
+            box-shadow: 0 0 14px rgba(255,189,69,.4);
+        }
+
+        .meter-high {
+            background: var(--red);
+            box-shadow: 0 0 14px rgba(255,77,103,.4);
+        }
+
+        .risk-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 7px;
+            color: #50616e;
+            font-family: var(--mono);
+            font-size: 9px;
+        }
+
+        .risk-notice {
+            margin-top: 18px;
+            padding: 11px 13px;
+            border-left: 2px solid #40515d;
+            color: #73838e;
+            font-size: 11px;
+            line-height: 1.5;
+            background: rgba(255,255,255,.015);
+        }
+
+        /* ================= RISK FACTORS ================= */
+
+        .risk-factors {
+            margin-top: 22px;
+            border-top: 1px solid #14232e;
+            padding-top: 18px;
+        }
+
+        .risk-factors-title {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1.8px;
+            margin-bottom: 10px;
+        }
+
+        .risk-factor {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 9px 11px;
+            margin-bottom: 7px;
+            background: rgba(255,255,255,.015);
+            border: 1px solid #14232e;
+        }
+
+        .risk-factor-main {
+            min-width: 0;
+        }
+
+        .risk-factor-name {
+            font-size: 11px;
+            color: #cbd9df;
+        }
+
+        .risk-factor-details {
+            color: #61747f;
+            font-family: var(--mono);
+            font-size: 9px;
+            margin-top: 4px;
+        }
+
+        .risk-factor-points {
+            font-family: var(--mono);
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .factor-critical {
+            color: var(--red);
+        }
+
+        .factor-high {
+            color: #ff7b8e;
+        }
+
+        .factor-medium {
+            color: var(--amber);
+        }
+
+        .factor-low {
+            color: var(--green);
+        }
+
+        .factor-clear {
+            color: var(--green);
+            border-color: rgba(57,255,136,.18);
+        }
+
+        .recommendation-box {
+            margin-top: 14px;
+            padding: 13px;
+            border: 1px solid rgba(0,229,255,.18);
+            background: rgba(0,229,255,.025);
+        }
+
+        .recommendation-label {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .recommendation-text {
+            color: #b9c9d1;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .factor-count {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 9px;
+            margin-top: 7px;
+        }
+
+        /* ================= GRID ================= */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            padding: 20px;
+            min-width: 0;
+            position: relative;
+        }
+
+        .card.full {
+            grid-column: 1 / -1;
+        }
+
+        .card h2 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: .3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 17px;
+        }
+
+        .icon {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 13px;
+        }
+
+        /* ================= ROWS ================= */
+
+        .row,
+        .check {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding: 10px 0;
+            border-bottom: 1px solid #14222d;
+        }
+
+        .row:last-child,
+        .check:last-child {
+            border-bottom: 0;
+        }
+
+        .label {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .value {
+            color: #d7e3e9;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid;
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: var(--green);
+            border-color: rgba(57,255,136,.35);
+            background: rgba(57,255,136,.05);
+        }
+
+        .failed {
+            color: var(--red);
+            border-color: rgba(255,77,103,.35);
+            background: rgba(255,77,103,.05);
+        }
+
+        .warning {
+            color: var(--amber);
+            border-color: rgba(255,189,69,.35);
+            background: rgba(255,189,69,.05);
+        }
+
+        /* ================= INFO BOX ================= */
+
+        .info-box {
+            margin-top: 14px;
+            padding: 11px 12px;
+            background: #080f16;
+            border: 1px solid #14232e;
+            color: #71838e;
+            font-family: var(--mono);
+            font-size: 10px;
+            line-height: 1.65;
+        }
+
+        .info-box strong {
+            color: #b8c9d1;
+        }
+
+        /* ================= OCR ================= */
+
+        .ocr-terminal {
+            background: #04090d;
+            border: 1px solid #152733;
+            padding: 14px;
+            max-height: 280px;
+            overflow-y: auto;
+            font-family: var(--mono);
+        }
+
+        .terminal-top {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            color: #526672;
+            font-size: 9px;
+        }
+
+        .terminal-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #31434d;
+        }
+
+        .ocr-line {
+            display: flex;
+            gap: 15px;
+            padding: 7px 0;
+            border-bottom: 1px dashed #12212b;
+            font-size: 11px;
+        }
+
+        .ocr-line:last-child {
+            border-bottom: 0;
+        }
+
+        .ocr-text {
+            color: #c7d6dd;
+            flex: 1;
+        }
+
+        .ocr-confidence {
+            color: var(--cyan);
+            white-space: nowrap;
+        }
+
+        /* ================= MRZ ================= */
+
+        .mrz-display {
+            background: #04090d;
+            border: 1px solid #152733;
+            padding: 16px;
+            font-family: var(--mono);
+        }
+
+        .mrz-status {
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .mrz-score {
+            color: var(--cyan);
+            font-size: 28px;
+            margin-top: 10px;
+        }
+
+        /* ================= CLASSIFICATION ================= */
+
+        .classification-box {
+            border: 1px solid rgba(0,229,255,.18);
+            background: rgba(0,229,255,.025);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .classification-label {
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .classification-value {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 18px rgba(0,229,255,.2);
+        }
+
+        /* ================= DOWNLOAD ================= */
+
+        .report-card {
+            grid-column: 1 / -1;
+            padding: 25px;
+            text-align: center;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(0,229,255,.035),
+                    rgba(7,12,18,.96)
+                );
+            border: 1px solid rgba(0,229,255,.22);
+            box-shadow: 0 18px 45px rgba(0,0,0,.25);
+        }
+
+        .report-title {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .report-heading {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .report-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+
+        .report-id {
+            color: #647783;
+            font-family: var(--mono);
+            font-size: 10px;
+            margin-bottom: 18px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 13px 22px;
+            color: #061016;
+            background: var(--cyan);
+            border: 1px solid var(--cyan);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            transition: .25s;
+            box-shadow: 0 0 20px rgba(0,229,255,.13);
+        }
+
+        .download-btn:hover {
+            background: transparent;
+            color: var(--cyan);
+            box-shadow: 0 0 25px rgba(0,229,255,.22);
+            transform: translateY(-1px);
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .bottom-actions {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            color: var(--cyan);
+            border: 1px solid rgba(0,229,255,.45);
+            background: rgba(0,229,255,.035);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 1px;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            background: rgba(0,229,255,.1);
+            box-shadow: 0 0 22px rgba(0,229,255,.12);
+            transform: translateY(-1px);
+        }
+
+        /* ================= NOTICE ================= */
+
+        .notice {
+            margin-top: 18px;
+            padding: 13px;
+            border-left: 2px solid var(--cyan);
+            color: #71838e;
+            font-family: var(--mono);
+            font-size: 10px;
+            line-height: 1.65;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer-note {
+            margin-top: 17px;
+            text-align: center;
+            color: #4f606b;
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: .5px;
+            line-height: 1.7;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 780px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card.full,
+            .report-card {
+                grid-column: auto;
+            }
+
+            .risk-score-section {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .risk-number {
+                font-size: 48px;
+            }
+
+            .system-status {
+                display: none;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            <span>◈</span>
+        </div>
+
+        <div>
+            DOCVERIFY AI
+            <small>IDENTITY FORENSICS PLATFORM</small>
+        </div>
+
+    </div>
+
+    <div class="system-status">
+        <span class="pulse"></span>
+        SYSTEM ONLINE // SCREENING ENGINE ACTIVE
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <!-- PAGE HEADER -->
+
+    <header class="page-header">
+
+        <div class="eyebrow">
+            CASE ANALYSIS / VERIFICATION COMPLETE
+        </div>
+
+        <h1>
+            Identity Screening Report
+        </h1>
+
+        <p>
+            AI-assisted forensic analysis of the submitted identity document
+        </p>
+
+    </header>
+
+
+    <!-- FILE -->
+
+    <div class="file-card">
+
+        <span class="label">
+            TARGET DOCUMENT //
+        </span>
+
+        <span class="file-name">
+            {{ filename }}
+        </span>
+
+    </div>
+
+
+    <!-- ================= RISK ASSESSMENT ================= -->
+
+    <section class="risk-card">
+
+        <div class="risk-header">
+
+            <div>
+
+                <div class="section-kicker">
+                    THREAT ASSESSMENT
+                </div>
+
+                <h2>
+                    Overall Risk Assessment
+                </h2>
+
+                <p>
+                    Composite result generated from document screening signals.
+                </p>
+
+            </div>
+
+
+            <div class="risk-badge
+                {% if risk_result.level == 'LOW' %}
+                    risk-low
+                {% elif risk_result.level == 'MEDIUM' %}
+                    risk-medium
+                {% else %}
+                    risk-high
+                {% endif %}
+            ">
+
+                {{ risk_result.level }}
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-score-section">
+
+            <div class="risk-number">
+
+                {{ risk_result.score }}
+
+                <span>
+                    / 100
+                </span>
+
+            </div>
+
+
+            <div class="risk-description">
+
+                {% if risk_result.level == 'LOW' %}
+
+                    <strong>
+                        LOW THREAT // SCREENING CLEAR
+                    </strong>
+
+                    <p>
+                        No major inconsistencies were detected during automated preliminary screening.
+                    </p>
+
+                {% elif risk_result.level == 'MEDIUM' %}
+
+                    <strong>
+                        MEDIUM THREAT // REVIEW ADVISED
+                    </strong>
+
+                    <p>
+                        Some verification concerns were detected. Further manual review is recommended.
+                    </p>
+
+                {% else %}
+
+                    <strong>
+                        HIGH THREAT // MANUAL REVIEW REQUIRED
+                    </strong>
+
+                    <p>
+                        Multiple risk indicators were detected. Manual verification is strongly recommended.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-meter">
+
+            <div class="risk-meter-fill
+                {% if risk_result.level == 'LOW' %}
+                    meter-low
+                {% elif risk_result.level == 'MEDIUM' %}
+                    meter-medium
+                {% else %}
+                    meter-high
+                {% endif %}
+            "style="width: {{ risk_result.score }}%;">
+            </div>
+
+        </div>
+
+
+        <div class="risk-scale">
+
+            <span>0 // LOW</span>
+            <span>30</span>
+            <span>60</span>
+            <span>100 // HIGH</span>
+
+        </div>
+
+
+        <div class="risk-notice">
+
+            <strong>
+                SCREENING NOTICE //
+            </strong>
+
+            This score is an AI-assisted risk indicator for preliminary screening and is not a final determination of identity fraud.
+
+        </div>
+
+
+        <!-- RISK FACTORS -->
+
+        <div class="risk-factors">
+
+            <div class="risk-factors-title">
+                RISK CONTRIBUTION // DETECTED SIGNALS
+            </div>
+
+
+            {% if risk_result.factors %}
+
+                {% for factor in risk_result.factors %}
+
+                    <div class="risk-factor">
+
+                        <div class="risk-factor-main">
+
+                            <div class="risk-factor-name">
+                                ⚠ {{ factor }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="risk-factor factor-clear">
+
+                    <div class="risk-factor-main">
+
+                        <div class="risk-factor-name">
+                            ✓ No significant risk factors detected
+                        </div>
+
+                    </div>
+
+                    <div class="risk-factor-points factor-low">
+                        CLEAR
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MAIN GRID ================= -->
+
+    <section class="grid">
+
+
+        <!-- DOCUMENT INFORMATION -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[01]</span>
+                Document Information
+            </h2>
+
+
+            <div class="row">
+
+                <span class="label">
+                    File
+                </span>
+
+                <span class="value">
+                    {{ filename }}
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Document Type
+                </span>
+
+                <span class="value">
+
+                    {% if document_type %}
+                        {{ document_type }}
+                    {% else %}
+                        UNKNOWN
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    OCR Confidence
+                </span>
+
+                <span class="value">
+                    {{ ocr_confidence }}%
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- DOCUMENT CLASSIFICATION -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[02]</span>
+                Document Classification
+            </h2>
+
+
+            <div class="classification-box">
+
+                <div class="classification-label">
+                    CLASSIFICATION ENGINE
+                </div>
+
+                <div class="classification-value">
+
+                    {% if document_type %}
+                        {{ document_type }}
+                    {% else %}
+                        UNKNOWN
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>
+                    CLASSIFIER //
+                </strong><br>
+
+                Rule-based document classification using detected document keywords.
+
+            </div>
+
+        </article>
+
+
+        <!-- EXTRACTED INFORMATION -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[03]</span>
+                Extracted Identity Information
+            </h2>
+
+
+            {% if extracted_fields %}
+
+                {% for key, value in extracted_fields.items() %}
+
+                    <div class="row">
+
+                        <span class="label">
+                            {{ key.replace("_", " ").upper() }}
+                        </span>
+
+                        <span class="value">
+                            {{ value }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="info-box">
+                    No identity fields were extracted.
+                </div>
+
+            {% endif %}
+
+        </article>
+
+
+        <!-- MRZ -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[04]</span>
+                MRZ Analysis
+            </h2>
+
+
+            <div class="mrz-display">
+
+                {% if mrz_result and mrz_result.detected %}
+
+                    <div class="mrz-status passed">
+                        MRZ DETECTED
+                    </div>
+
+                    <div class="label" style="margin-top:15px;">
+                        SCREENING SCORE
+                    </div>
+
+                    <div class="mrz-score">
+                        {{ mrz_result.score }}
+                    </div>
+
+                {% else %}
+
+                    <div class="mrz-status warning">
+                        MRZ NOT DETECTED
+                    </div>
+
+                    <div class="info-box">
+                        No MRZ-like pattern was detected in the OCR output.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>
+                    MRZ ENGINE //
+                </strong><br>
+
+                Prototype regex-based MRZ screening. It is not a complete ICAO MRZ parser.
+
+            </div>
+
+        </article>
+
+
+        <!-- VALIDATION -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[05]</span>
+                Document Validation
+            </h2>
+
+
+            {% if validation_result %}
+
+                {% if validation_result.valid %}
+
+                    <div class="check">
+
+                        <span class="label">
+                            Overall Validation
+                        </span>
+
+                        <span class="status passed">
+                            PASSED
+                        </span>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="check">
+
+                        <span class="label">
+                            Overall Validation
+                        </span>
+
+                        <span class="status failed">
+                            FAILED
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if validation_result.issues %}
+
+                    {% for issue in validation_result.issues %}
+
+                        <div class="check">
+
+                            <span class="label">
+                                Issue
+                            </span>
+
+                            <span class="value">
+                                {{ issue }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% else %}
+
+                <div class="info-box">
+                    Validation result unavailable.
+                </div>
+
+            {% endif %}
+
+        </article>
+
+
+        <!-- REGISTRY -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[06]</span>
+                Registry Verification
+            </h2>
+
+
+            {% if registry_result %}
+
+                <div class="row">
+
+                    <span class="label">
+                        Record Found
+                    </span>
+
+                    <span class="status
+                        {% if registry_result.found %}
+                            passed
+                        {% else %}
+                            warning
+                        {% endif %}
+                    ">
+
+                        {% if registry_result.found %}
+                            FOUND
+                        {% else %}
+                            NOT FOUND
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Record Status
+                    </span>
+
+                    <span class="value">
+
+                        {{ registry_result.status }}
+
+                    </span>
+
+                </div>
+
+            {% else %}
+
+                <div class="info-box">
+                    Registry verification unavailable.
+                </div>
+
+            {% endif %}
+
+
+            <div class="info-box">
+
+                <strong>
+                    REGISTRY ENGINE //
+                </strong><br>
+
+                This prototype uses a simulated registry dataset and does not connect to a real government database.
+
+            </div>
+
+        </article>
+
+
+        <!-- TAMPERING -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[07]</span>
+                Forensic / Tampering Analysis
+            </h2>
+
+
+            {% if tampering_result %}
+
+                <div class="row">
+
+                    <span class="label">
+                        Tampering Indicator
+                    </span>
+
+                    <span class="status
+                        {% if tampering_result.tampering_detected %}
+                            failed
+                        {% else %}
+                            passed
+                        {% endif %}
+                    ">
+
+                        {% if tampering_result.tampering_detected %}
+                            POSSIBLE TAMPERING
+                        {% else %}
+                            NO ANOMALY DETECTED
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="info-box">
+
+                <strong>
+                    FORENSIC ENGINE //
+                </strong><br>
+
+                JPEG compression / ELA-style analysis is used as a preliminary tampering indicator.
+
+                <br><br>
+
+                <small>
+                    This indicator does not independently prove document fraud.
+                </small>
+
+            </div>
+
+        </article>
+
+
+        <!-- FACE -->
+
+        <article class="card">
+
+            <h2>
+                <span class="icon">[08]</span>
+                Face Verification
+            </h2>
+
+
+            {% if face_result %}
+
+                <div class="row">
+
+                    <span class="label">
+                        Verification
+                    </span>
+
+                    <span class="status
+                        {% if face_result.match %}
+                            passed
+                        {% else %}
+                            failed
+                        {% endif %}
+                    ">
+
+                        {% if face_result.match %}
+                            MATCH
+                        {% else %}
+                            NO MATCH
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Similarity
+                    </span>
+
+                    <span class="value">
+                        {{ face_result.similarity }}%
+                    </span>
+
+                </div>
+
+            {% else %}
+
+                <div class="info-box">
+                    Face verification unavailable.
+                </div>
+
+            {% endif %}
+
+
+            <div class="info-box">
+
+                <strong>
+                    FACE ENGINE //
+                </strong><br>
+
+                Basic Haar detection and pixel-similarity screening.
+
+                <br><br>
+
+                <small>
+                    This prototype is not production-grade biometric verification.
+                </small>
+
+            </div>
+
+        </article>
+
+
+        <!-- OCR -->
+
+        <article class="card full">
+
+            <h2>
+
+                <span class="icon">
+                    [09]
+                </span>
+
+                OCR Analysis
+
+                <span style="
+                    color:var(--green);
+                    font-family:var(--mono);
+                    font-size:9px;
+                    margin-left:auto;
+                ">
+                    ● LIVE DATA
+                </span>
+
+            </h2>
+
+
+            <div class="ocr-terminal">
+
+                <div class="terminal-top">
+
+                    <span class="terminal-dot"></span>
+                    <span class="terminal-dot"></span>
+                    <span class="terminal-dot"></span>
+
+                    <span style="margin-left:4px;">
+                        ocr_engine // extracted_stream
+                    </span>
+
+                </div>
+
+
+                {% if ocr_results %}
+
+                    {% for item in ocr_results %}
+
+                        <div class="ocr-line">
+
+                            <span class="ocr-text">
+
+                                {% if item.text is defined %}
+
+                                    {{ item.text }}
+
+                                {% elif item|length > 1 %}
+
+                                    {{ item[1] }}
+
+                                {% else %}
+
+                                    {{ item }}
+
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="ocr-confidence">
+
+                                {% if item.confidence is defined %}
+
+                                    {{ item.confidence }}%
+
+                                {% elif item|length > 2 %}
+
+                                    {{ "%.2f"|format(item[2] * 100) }}%
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="ocr-line">
+
+                        <span class="ocr-text">
+                            No OCR text detected.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </article>
+
+
+        <!-- REPORT DOWNLOAD -->
+
+        <article class="report-card">
+
+            <div class="report-title">
+                [10] FORENSIC REPORT
+            </div>
+
+            <div class="report-heading">
+                Screening Analysis Complete
+            </div>
+
+            <div class="report-description">
+                Generate or download the complete forensic screening report.
+            </div>
+
+
+            {% if report_id %}
+
+                <div class="report-id">
+                    REPORT ID // {{ report_id }}
+                </div>
+
+            {% endif %}
+
+
+            {% if report_filename %}
+
+                <a
+                    href="{{ url_for('download_report', filename=report_filename) }}"
+                    class="download-btn"
+                >
+                    ↓ DOWNLOAD FORENSIC REPORT
+                </a>
+
+            {% else %}
+
+                <div class="info-box">
+                    Report file is not available.
+                </div>
+
+            {% endif %}
+
+        </article>
+
+    </section>
+
+
+    <!-- OPERATIONAL NOTICE -->
+
+    <div class="notice">
+
+        <strong>
+            OPERATIONAL NOTICE //
+        </strong><br>
+
+        DOCVERIFY AI provides AI-assisted preliminary screening.
+        Results should be reviewed by an authorized officer before making
+        any final identity or document decision.
+
+    </div>
+
+
+    <!-- NEW SCREENING -->
+
+    <div class="bottom-actions">
+
+        <a href="/" class="btn">
+            ← INITIATE NEW SCREENING
+        </a>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer-note">
+
+        DOCVERIFY AI // AI-ASSISTED IDENTITY &amp; DOCUMENT SCREENING
+        <br>
+
+        DEMONSTRATION PROTOTYPE // RESULTS REQUIRE HUMAN REVIEW
+
+    </div>
+
+</main>
+
+</body>
+</html>

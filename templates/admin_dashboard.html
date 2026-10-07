@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | DOCVERIFY AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(0,255,255,0.08), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(0,255,120,0.06), transparent 30%),
+                #05080d;
+            color: #e8ffff;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 75px;
+            border-bottom: 1px solid rgba(0,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            background: rgba(3,8,14,0.92);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #00ffff;
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .admin-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status {
+            color: #00ff88;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: #ff5577;
+            border: 1px solid #ff5577;
+            padding: 9px 16px;
+            border-radius: 5px;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .logout:hover {
+            background: #ff5577;
+            color: #05080d;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 40px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .header p {
+            margin-top: 10px;
+            color: #8fa5ad;
+            font-size: 14px;
+        }
+
+        /* STAT CARDS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(8,18,25,0.9);
+            border: 1px solid rgba(0,255,255,0.18);
+            padding: 25px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0,255,255,0.1);
+        }
+
+        .stat-title {
+            color: #7e969e;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            font-size: 34px;
+            margin-top: 12px;
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .stat-desc {
+            color: #63777e;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        /* CONTENT GRID */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .panel {
+            background: rgba(7,16,22,0.92);
+            border: 1px solid rgba(0,255,255,0.16);
+            border-radius: 10px;
+            padding: 25px;
+        }
+
+        .panel-title {
+            font-size: 17px;
+            color: #00ffff;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* TABLE */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11px;
+            color: #6f8992;
+            text-transform: uppercase;
+            padding: 12px;
+            border-bottom: 1px solid rgba(0,255,255,0.12);
+        }
+
+        td {
+            padding: 14px 12px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #c6d5d9;
+        }
+
+        .badge {
+            padding: 5px 9px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .low {
+            color: #00ff88;
+            background: rgba(0,255,136,0.08);
+        }
+
+        .medium {
+            color: #ffc400;
+            background: rgba(255,196,0,0.08);
+        }
+
+        .high {
+            color: #ff5577;
+            background: rgba(255,85,119,0.08);
+        }
+
+        .verified {
+            color: #00ff88;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .flagged {
+            color: #ff5577;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* SIDE PANEL */
+
+        .system-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .system-item:last-child {
+            border-bottom: none;
+        }
+
+        .system-name {
+            font-size: 13px;
+            color: #c8d7da;
+        }
+
+        .online {
+            color: #00ff88;
+            font-size: 11px;
+        }
+
+        /* QUICK ACTIONS */
+
+        .actions {
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            display: block;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(0,255,255,0.25);
+            color: #00ffff;
+            border-radius: 5px;
+            font-size: 13px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #00ffff;
+            color: #05080d;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            color: #52666d;
+            font-size: 11px;
+            margin-top: 40px;
+            padding-bottom: 20px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-status .status {
+                display: none;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            th,
+            td {
+                padding: 9px 5px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            DOC<span>VERIFY</span> AI
+        </div>
+
+        <div class="admin-status">
+
+            <div class="status">
+                <span class="status-dot"></span>
+                ADMIN ONLINE
+            </div>
+
+            <a href="{{ url_for('admin_logout') }}" class="logout">
+                LOGOUT
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <div class="header">
+
+            <h1>ADMIN DASHBOARD</h1>
+
+            <p>
+                Central monitoring and document verification control panel
+            </p>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Total Screenings
+                </div>
+
+                <div class="stat-number">
+                    {{ statistics["total"] }}
+                </div>
+
+                <div class="stat-desc">
+                    Documents processed
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Low Risk
+                </div>
+
+                <div class="stat-number">
+                    {{ statistics["low"] }}
+                </div>
+
+                <div class="stat-desc">
+                    Safe screening results
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    High Risk
+                </div>
+
+                <div class="stat-number">
+                    {{ statistics["high"] }}
+                </div>
+
+                <div class="stat-desc">
+                    Requires investigation
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Registry Records
+                </div>
+
+                <div class="stat-number">
+                    3
+                </div>
+
+                <div class="stat-desc">
+                    Simulated records
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DASHBOARD CONTENT -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- SCREENINGS -->
+
+            <div class="panel">
+
+                <div class="panel-title">
+                    RECENT SCREENINGS
+                </div>
+
+                <table>
+
+                    <thead>
+                        <tr>
+
+                            <th>
+                                Report ID
+                            </th>
+
+                            <th>
+                                Date & Time
+                            </th>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Risk
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% if screenings %}
+
+                        {% for screening in screenings %}
+
+                        <tr>
+
+                            <td>
+                                {{ screening["screening_id"] }}
+                            </td>
+
+                            <td>
+                                {{ screening["date_time"] }}
+                            </td>
+
+                            <td>
+                                {{ screening["document_name"] }}
+                            </td>
+
+                            <td>
+                                {{ screening["document_type"] }}
+                            </td>
+
+                            <td>
+
+                                {% if screening["risk_level"] == "LOW" %}
+
+                                    <span class="badge low">
+                                        LOW
+                                    </span>
+
+                                {% elif screening["risk_level"] == "MEDIUM" %}
+
+                                    <span class="badge medium">
+                                        MEDIUM
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge high">
+                                        HIGH
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if screening["risk_level"] == "LOW" %}
+
+                                    <span class="verified">
+                                        VERIFIED
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="flagged">
+                                        FLAGGED
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="6" class="empty-state">
+                                NO SCREENINGS RECORDED
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- SYSTEM STATUS -->
+
+            <div class="panel">
+
+                <div class="panel-title">
+                    SYSTEM STATUS
+                </div>
+
+
+                <div class="system-item">
+
+                    <span class="system-name">
+                        OCR Engine
+                    </span>
+
+                    <span class="online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span class="system-name">
+                        Document Classifier
+                    </span>
+
+                    <span class="online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span class="system-name">
+                        Registry Service
+                    </span>
+
+                    <span class="online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span class="system-name">
+                        Tampering Detector
+                    </span>
+
+                    <span class="online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span class="system-name">
+                        Face Verification
+                    </span>
+
+                    <span class="online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <a href="{{ url_for('home') }}" class="action-btn">
+                        OPEN VERIFICATION SYSTEM
+                    </a>
+
+                    <a href="{{ url_for('admin_logout') }}" class="action-btn">
+                        SIGN OUT ADMIN
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            DOCVERIFY AI • ADMIN CONTROL SYSTEM • PROTOTYPE
+
+        </footer>
+
+    </main>
+
+</body>
+</html>
