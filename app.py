@@ -42,7 +42,7 @@ from database import (
 app = Flask(__name__)
 
 # Secret key for admin session
-app.secret_key = "docverify-ai-admin-secret-key"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 
 
 # =========================
@@ -63,9 +63,8 @@ os.makedirs(REPORT_FOLDER, exist_ok=True)
 # ADMIN CREDENTIALS
 # =========================
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
-
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
 
 # =========================
 # DATABASE INITIALIZATION
